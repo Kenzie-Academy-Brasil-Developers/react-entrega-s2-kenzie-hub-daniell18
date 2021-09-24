@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 
 import { makeStyles } from "@material-ui/styles";
 import { Redirect } from "react-router";
-function Logon({ authorized }) {
+function Logon({ authorized, setAuthorized }) {
   const useStyles = makeStyles((theme) => ({
     root: { height: "100vh", backgroundColor: "#403F45" },
     header: {
@@ -25,7 +25,7 @@ function Logon({ authorized }) {
         alignItems="center"
       >
         <Grid item className={classe.header}>
-          <Header />
+          <Header setAuthorized={setAuthorized} />
         </Grid>
         <Grid>
           <Tech />

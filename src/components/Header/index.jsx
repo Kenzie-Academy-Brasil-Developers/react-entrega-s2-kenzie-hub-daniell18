@@ -1,8 +1,8 @@
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { useHistory } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import logoKenzie from "../../assets/image/logoF.png";
-function Header() {
+function Header({ setAuthorized }) {
   const useStyles = makeStyles((theme) => ({
     root: {
       height: "88px",
@@ -33,7 +33,8 @@ function Header() {
   const history = useHistory();
   const classe = useStyles();
   const handclick = () => {
-    history.push("/");
+    <Redirect to="/" />;
+    setAuthorized(false);
   };
   return (
     <>

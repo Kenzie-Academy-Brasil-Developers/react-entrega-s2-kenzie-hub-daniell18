@@ -93,7 +93,7 @@ function Login({ authorized, setAuthorized }) {
         return history.push("/logon");
       });
   };
-  console.log(authorized);
+
   if (authorized) {
     return <Redirect to="/logon" />;
   }

@@ -26,7 +26,6 @@ function Tech() {
 
   const [open, setOpen] = useState(false);
   const handleClose = (e) => {
-    console.log(e);
     axios
       .post(
         "https://kenziehub.herokuapp.com/users/techs",
