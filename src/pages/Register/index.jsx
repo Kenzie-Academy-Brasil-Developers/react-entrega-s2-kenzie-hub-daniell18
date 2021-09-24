@@ -3,11 +3,11 @@ import { makeStyles } from "@material-ui/styles";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useHistory } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import axios from "axios";
 import bg from "../../assets/image/bglarge.png";
 
-function Register() {
+function Register({ authorized }) {
   const useStyles = makeStyles((theme) => ({
     root: {
       height: "100vh",
@@ -122,6 +122,9 @@ function Register() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  if (authorized) {
+    return <Redirect to="/logon" />;
+  }
 
   return (
     <>

@@ -3,14 +3,16 @@ import { makeStyles } from "@material-ui/styles";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useHistory } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import bglarge from "../../assets/image/bglarge.png";
 import axios from "axios";
-function Login() {
+
+function Login({ authorized, setAuthorized }) {
   const schema = yup.object().shape({
     email: yup.string().required("Campo Obrigatorio"),
     password: yup.string().required("Campo Obrigatorio"),
   });
+
   const {
     handleSubmit,
     register,
@@ -84,9 +86,17 @@ function Login() {
     axios
       .post("https://kenziehub.herokuapp.com/sessions", e)
       .then((Response) => {
-        history.push("/logon");
+        const { token, user } = Response.data;
+        localStorage.setItem("@Kenziehub:token", JSON.stringify(token));
+        localStorage.setItem("@Kenziehub:user", JSON.stringify(user));
+        setAuthorized(true);
+        return history.push("/logon");
       });
   };
+  console.log(authorized);
+  if (authorized) {
+    return <Redirect to="/logon" />;
+  }
   return (
     <>
       <div>

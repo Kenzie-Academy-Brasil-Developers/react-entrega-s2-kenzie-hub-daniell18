@@ -1,17 +1,34 @@
 import { Grid } from "@material-ui/core";
-
+import Tech from "../../components/Tech";
 import Header from "../../components/Header";
-function Logon() {
+
+import { makeStyles } from "@material-ui/styles";
+import { Redirect } from "react-router";
+function Logon({ authorized }) {
+  const useStyles = makeStyles((theme) => ({
+    root: { height: "100vh", backgroundColor: "#403F45" },
+    header: {
+      height: "20vh",
+    },
+  }));
+  const classe = useStyles();
+  if (!authorized) {
+    return <Redirect to="/" />;
+  }
   return (
     <>
       <Grid
+        className={classe.root}
         container
         direction="column"
         justifyContent="flex-start"
         alignItems="center"
       >
-        <Grid item>
+        <Grid item className={classe.header}>
           <Header />
+        </Grid>
+        <Grid>
+          <Tech />
         </Grid>
       </Grid>
     </>
