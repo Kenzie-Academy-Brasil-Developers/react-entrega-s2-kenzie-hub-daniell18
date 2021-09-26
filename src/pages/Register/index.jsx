@@ -88,7 +88,7 @@ function Register({ authorized }) {
         toast.success("Conta criada com sucesso");
       })
       .catch((_) => toast.error("Erro ao crair conta tente novamente"));
-    return <Redirect to="/" />;
+    history.push("/");
   };
   const schema = yup.object().shape({
     email: yup.string().required("Campo Obrigatorio").email("Email invalido"),
