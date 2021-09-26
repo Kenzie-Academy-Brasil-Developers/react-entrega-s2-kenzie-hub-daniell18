@@ -7,7 +7,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { BiCommentAdd } from "react-icons/bi";
 import Card from "../Card";
-import { toast } from "react-toastify";
 
 function Tech() {
   const schema = yup.object().shape({
