@@ -8,11 +8,11 @@ import { useState } from "react";
 import { BiCommentAdd } from "react-icons/bi";
 import Card from "../Card";
 import { toast } from "react-toastify";
-
-function Tech() {
+function Works() {
   const schema = yup.object().shape({
     title: yup.string().required("Campo Obrigatorio"),
-    status: yup.string().required("Campo Obrigatorio"),
+    description: yup.string().required("Campo Obrigatorio"),
+    deploy_url: yup.string().required("Campo Obrigatorio"),
   });
   const {
     handleSubmit,
@@ -31,8 +31,12 @@ function Tech() {
   const [open, setOpen] = useState(false);
   const handleClose = (e) => {
     axios.post(
-      "https://kenziehub.herokuapp.com/users/techs",
-      { title: e.title, status: e.status },
+      "https://kenziehub.herokuapp.com/users/works",
+      {
+        title: e.title,
+        description: e.description,
+        deploy_url: e.deploy_url,
+      },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -45,14 +49,13 @@ function Tech() {
   const handleOpen = () => {
     setOpen(true);
   };
-
   const useStyles = makeStyles((theme) => ({
     root: {
       width: "100vw",
 
       fontFamily: "Roboto",
       display: "flex",
-      marginTop: "40px",
+      marginTop: "20px",
       flexDirection: "column",
       alignItems: "flex-start",
     },
@@ -75,10 +78,10 @@ function Tech() {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      gap: "7px",
+
       flexDirection: "column",
       borderRadius: "10px",
-      height: "50vh",
+      height: "54vh",
     },
     button: {
       width: "100px",
@@ -111,36 +114,35 @@ function Tech() {
       justifyContent: "space-between",
     },
   }));
-
   const classe = useStyles();
-
   console.log(tech);
   return (
     <>
       <div className={classe.root}>
         <div className={classe.headerTech}>
-          <h3 className={classe.title}>Minhas Tecnologias</h3>
+          <h3 className={classe.title}>Meus Trabalhos</h3>
           <Button
             variant="text"
             endIcon={<BiCommentAdd />}
             className={classe.ButtonAdd}
             onClick={() => handleOpen()}
           >
-            Adicione tecnologias
+            Adicione Novos Trabalhos
           </Button>
         </div>
         <div className={classe.card}>
-          {tech.techs
-            ? tech.techs.map((element, index) => (
+          {tech.works
+            ? tech.works.map((element, index) => (
                 <div key={index}>
                   <Card
                     title={element.title}
-                    status={element.status}
-                    techid={element.id}
+                    status={element.description}
+                    workid={element.id}
+                    deploy_url={element.deploy_url}
                   />
                 </div>
               ))
-            : ""}
+            : "nao tem"}
         </div>
 
         <Modal className={classe.modal} open={open} onClose={handleClose}>
@@ -150,10 +152,12 @@ function Tech() {
             onSubmit={handleSubmit(handleClose)}
           >
             <h2 className={classe.titleModal}>Adicione uma Tecnologia</h2>
+            <TextField label="Titulo" {...register("title")} />
             <p className={classe.paragrafo}>{errors.title?.message}</p>
-            <TextField label="Tecnologia" {...register("title")} />
-            <p className={classe.paragrafo}>{errors.status?.message}</p>
-            <TextField label="Status" {...register("status")} />
+            <TextField label="description" {...register("description")} />
+            <p className={classe.paragrafo}>{errors.description?.message}</p>
+            <TextField label="Url" {...register("deploy_url")} />
+            <p className={classe.paragrafo}>{errors.deploy_url?.message}</p>
             <Button className={classe.button} variant="contained" type="submit">
               Adicionar
             </Button>
@@ -163,4 +167,4 @@ function Tech() {
     </>
   );
 }
-export default Tech;
+export default Works;

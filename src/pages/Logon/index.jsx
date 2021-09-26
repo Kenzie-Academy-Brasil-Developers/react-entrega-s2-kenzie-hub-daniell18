@@ -1,37 +1,44 @@
 import { Grid } from "@material-ui/core";
 import Tech from "../../components/Tech";
 import Header from "../../components/Header";
+import "./style.css";
 
-import { makeStyles } from "@material-ui/styles";
 import { Redirect } from "react-router";
+import Works from "../../components/Works";
+import { motion } from "framer-motion";
 function Logon({ authorized, setAuthorized }) {
-  const useStyles = makeStyles((theme) => ({
-    root: { height: "100vh", backgroundColor: "#403F45" },
-    header: {
-      height: "20vh",
-    },
-  }));
-  const classe = useStyles();
   if (!authorized) {
     return <Redirect to="/" />;
   }
   return (
-    <>
+    <motion.div
+      className="teste"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 2 }}
+    >
       <Grid
-        className={classe.root}
+        className="root"
         container
+        wrap="nowrap"
         direction="column"
         justifyContent="flex-start"
         alignItems="center"
       >
-        <Grid item className={classe.header}>
+        <Grid item>
           <Header setAuthorized={setAuthorized} />
         </Grid>
         <Grid>
           <Tech />
         </Grid>
+        <Grid>
+          <Works />
+        </Grid>
+
+        <footer className="footer"></footer>
       </Grid>
-    </>
+    </motion.div>
   );
 }
 export default Logon;

@@ -6,11 +6,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Redirect, useHistory } from "react-router";
 import axios from "axios";
 import bg from "../../assets/image/bglarge.png";
+import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 function Register({ authorized }) {
   const useStyles = makeStyles((theme) => ({
     root: {
-      height: "100vh",
       backgroundImage: `url(${bg})`,
       display: "flex",
       flexDirection: "column",
@@ -49,9 +50,7 @@ function Register({ authorized }) {
 
       marginTop: "2px",
     },
-    container: {
-      gap: "4px",
-    },
+
     paragrafo: {
       margin: "0",
       fontSize: "12px",
@@ -85,10 +84,11 @@ function Register({ authorized }) {
     const user = { name, email, password, bio, contact, course_module };
     axios
       .post("https://kenziehub.herokuapp.com/users", user)
-      .then((Response) => {
-        console.log(Response);
+      .then((_) => {
+        toast.success("Conta criada com sucesso");
       })
-      .catch((reponse) => console.log(reponse));
+      .catch((_) => toast.error("Erro ao crair conta tente novamente"));
+    return <Redirect to="/" />;
   };
   const schema = yup.object().shape({
     email: yup.string().required("Campo Obrigatorio").email("Email invalido"),
@@ -136,122 +136,129 @@ function Register({ authorized }) {
           autoComplete="off"
           className={classe.root}
         >
-          <Paper className={classe.paper}>
-            <Grid
-              container
-              direction="column"
-              justifyContent="center"
-              wrap="nowrap"
-              alignItems="center"
-              className={classe.container}
-            >
-              <Grid item>
-                <h2 className={classe.title}>Sign-Up</h2>
-              </Grid>
-              <Grid item>
-                <p className={classe.paragrafo}>{errors.name?.message}</p>
-                <TextField
-                  className={classe.input}
-                  variant="outlined"
-                  label="Name"
-                  error={false}
-                  helperText=""
-                  inputProps={{ style: { height: "11px" } }}
-                  placeholde="Name"
-                  {...register("name")}
-                />
-              </Grid>
-              <Grid item>
-                <p className={classe.paragrafo}>{errors.email?.message}</p>
-                <TextField
-                  className={classe.input}
-                  variant="outlined"
-                  label="Email"
-                  placeholde="Email"
-                  {...register("email")}
-                />
-              </Grid>
-              <Grid item>
-                <p className={classe.paragrafo}>{errors.password?.message}</p>
-                <TextField
-                  className={classe.input}
-                  variant="outlined"
-                  label="Password"
-                  type="password"
-                  placeholde="password"
-                  {...register("password")}
-                />
-              </Grid>
-              <Grid item>
-                <p className={classe.paragrafo}>
-                  {errors.confirmedPassword?.message}
-                </p>
-                <TextField
-                  className={classe.input}
-                  type="password"
-                  variant="outlined"
-                  label="Confirmed Password"
-                  placeholde="Confirmed Password"
-                  {...register("confirmedPassword")}
-                />
-              </Grid>
-              <Grid item>
-                <p className={classe.paragrafo}>{errors.contact?.message}</p>
-                <TextField
-                  className={classe.input}
-                  variant="outlined"
-                  label="contact"
-                  placeholde="Contact"
-                  {...register("contact")}
-                />
-              </Grid>
-              <Grid item>
-                <p className={classe.paragrafo}>{errors.bio?.message}</p>
-                <TextField
-                  className={classe.input}
-                  variant="outlined"
-                  label="Bio"
-                  placeholde="Bio"
-                  {...register("bio")}
-                />
-              </Grid>
-              <Grid item>
-                <p className={classe.paragrafo}>
-                  {errors.course_module?.message}
-                </p>
-                <TextField
-                  className={classe.input}
-                  variant="outlined"
-                  label="Modulo autal"
-                  placeholde="Modulo atual"
-                  {...register("course_module")}
-                />
-              </Grid>
+          <motion.div
+            initial={{ transform: "translateY(-1050px)", opacity: "0" }}
+            animate={{ transform: "translateY(0px)", opacity: 1 }}
+            exit={{ transform: "translateY(0)", opacity: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <Paper className={classe.paper}>
+              <Grid
+                container
+                direction="column"
+                justifyContent="center"
+                wrap="nowrap"
+                alignItems="center"
+                className={classe.container}
+              >
+                <Grid item>
+                  <h2 className={classe.title}>Sign-Up</h2>
+                </Grid>
+                <Grid item>
+                  <p className={classe.paragrafo}>{errors.name?.message}</p>
+                  <TextField
+                    className={classe.input}
+                    variant="outlined"
+                    label="Name"
+                    error={false}
+                    helperText=""
+                    inputProps={{ style: { height: "11px" } }}
+                    placeholde="Name"
+                    {...register("name")}
+                  />
+                </Grid>
+                <Grid item>
+                  <p className={classe.paragrafo}>{errors.email?.message}</p>
+                  <TextField
+                    className={classe.input}
+                    variant="outlined"
+                    label="Email"
+                    placeholde="Email"
+                    {...register("email")}
+                  />
+                </Grid>
+                <Grid item>
+                  <p className={classe.paragrafo}>{errors.password?.message}</p>
+                  <TextField
+                    className={classe.input}
+                    variant="outlined"
+                    label="Password"
+                    type="password"
+                    placeholde="password"
+                    {...register("password")}
+                  />
+                </Grid>
+                <Grid item>
+                  <p className={classe.paragrafo}>
+                    {errors.confirmedPassword?.message}
+                  </p>
+                  <TextField
+                    className={classe.input}
+                    type="password"
+                    variant="outlined"
+                    label="Confirmed Password"
+                    placeholde="Confirmed Password"
+                    {...register("confirmedPassword")}
+                  />
+                </Grid>
+                <Grid item>
+                  <p className={classe.paragrafo}>{errors.contact?.message}</p>
+                  <TextField
+                    className={classe.input}
+                    variant="outlined"
+                    label="contact"
+                    placeholde="Contact"
+                    {...register("contact")}
+                  />
+                </Grid>
+                <Grid item>
+                  <p className={classe.paragrafo}>{errors.bio?.message}</p>
+                  <TextField
+                    className={classe.input}
+                    variant="outlined"
+                    label="Bio"
+                    placeholde="Bio"
+                    {...register("bio")}
+                  />
+                </Grid>
+                <Grid item>
+                  <p className={classe.paragrafo}>
+                    {errors.course_module?.message}
+                  </p>
+                  <TextField
+                    className={classe.input}
+                    variant="outlined"
+                    label="Modulo autal"
+                    placeholde="Modulo atual"
+                    {...register("course_module")}
+                  />
+                </Grid>
 
-              <Grid item>
-                <Button
-                  className={classe.button}
-                  type="submit"
-                  variant="contained"
-                >
-                  Entrar
-                </Button>
-              </Grid>
-              <Grid item>
-                <p className={classe.paragrafo}>
-                  Ja tem uma conta ? Faça o
-                  <button
-                    className={classe.redirect}
-                    onClick={() => {
-                      handleclik();
-                    }}
+                <Grid item>
+                  <Button
+                    className={classe.button}
+                    type="submit"
+                    variant="contained"
                   >
-                    Login
-                  </button>
-                </p>
+                    Entrar
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <p className={classe.paragrafo}>
+                    Ja tem uma conta ? Faça o
+                    <button
+                      className={classe.redirect}
+                      onClick={() => {
+                        handleclik();
+                      }}
+                    >
+                      Login
+                    </button>
+                  </p>
+                </Grid>
               </Grid>
-            </Grid>
-          </Paper>
+            </Paper>
+          </motion.div>
         </Box>
       </div>
     </>

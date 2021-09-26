@@ -6,7 +6,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Redirect, useHistory } from "react-router";
 import bglarge from "../../assets/image/bglarge.png";
 import axios from "axios";
-
+import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 function Login({ authorized, setAuthorized }) {
   const schema = yup.object().shape({
     email: yup.string().required("Campo Obrigatorio"),
@@ -89,8 +90,12 @@ function Login({ authorized, setAuthorized }) {
         const { token, user } = Response.data;
         localStorage.setItem("@Kenziehub:token", JSON.stringify(token));
         localStorage.setItem("@Kenziehub:user", JSON.stringify(user));
+        toast.success("Login realizado com sucesso");
         setAuthorized(true);
         return history.push("/logon");
+      })
+      .catch((_) => {
+        toast.error("Erro ao ralizar login");
       });
   };
 
@@ -107,62 +112,69 @@ function Login({ authorized, setAuthorized }) {
           autoComplete="off"
           className={classe.root}
         >
-          <Paper className={classe.paper}>
-            <Grid
-              container
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-              className={classe.container}
-            >
-              <Grid item>
-                <h2 className={classe.title}>Sign-in</h2>
-              </Grid>
-              <Grid item>
-                <p className={classe.paragrafo}>{errors.email?.message}</p>
-                <TextField
-                  className={classe.input}
-                  variant="outlined"
-                  label="Email"
-                  placeholde="Email"
-                  {...register("email")}
-                />
-              </Grid>
-              <Grid item>
-                <p className={classe.paragrafo}>{errors.password?.message}</p>
-                <TextField
-                  className={classe.input}
-                  variant="outlined"
-                  label="Password"
-                  type="password"
-                  placeholde="password"
-                  {...register("password")}
-                />
-              </Grid>
-              <Grid item>
-                <Button
-                  className={classe.button}
-                  type="submit"
-                  variant="contained"
-                >
-                  Entrar
-                </Button>
-              </Grid>
-              <Grid item>
-                <p className={classe.paragrafo}>
-                  E novo por aqui ?{" "}
-                  <button
-                    className={classe.teste}
-                    onClick={() => {
-                      handleclik();
-                    }}
+          <motion.div
+            initial={{ transform: "translateX(-1050px)", opacity: "0" }}
+            animate={{ transform: "translateX(0px)", opacity: 1 }}
+            exit={{ transform: "translateX(0)", opacity: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <Paper className={classe.paper}>
+              <Grid
+                container
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+                className={classe.container}
+              >
+                <Grid item>
+                  <h2 className={classe.title}>Sign-in</h2>
+                </Grid>
+                <Grid item>
+                  <p className={classe.paragrafo}>{errors.email?.message}</p>
+                  <TextField
+                    className={classe.input}
+                    variant="outlined"
+                    label="Email"
+                    placeholde="Email"
+                    {...register("email")}
+                  />
+                </Grid>
+                <Grid item>
+                  <p className={classe.paragrafo}>{errors.password?.message}</p>
+                  <TextField
+                    className={classe.input}
+                    variant="outlined"
+                    label="Password"
+                    type="password"
+                    placeholde="password"
+                    {...register("password")}
+                  />
+                </Grid>
+                <Grid item>
+                  <Button
+                    className={classe.button}
+                    type="submit"
+                    variant="contained"
                   >
-                    Cadastre-se
-                  </button>
-                </p>
+                    Entrar
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <p className={classe.paragrafo}>
+                    E novo por aqui ?{" "}
+                    <button
+                      className={classe.teste}
+                      onClick={() => {
+                        handleclik();
+                      }}
+                    >
+                      Cadastre-se
+                    </button>
+                  </p>
+                </Grid>
               </Grid>
-            </Grid>
-          </Paper>
+            </Paper>
+          </motion.div>
         </Box>
       </div>
     </>
