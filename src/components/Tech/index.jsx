@@ -4,7 +4,7 @@ import axios from "axios";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiCommentAdd } from "react-icons/bi";
 import Card from "../Card";
 
@@ -26,21 +26,33 @@ function Tech() {
   const [token] = useState(
     JSON.parse(localStorage.getItem("@Kenziehub:token")) || ""
   );
-
+  const [id] = useState(tech.id);
   const [open, setOpen] = useState(false);
+  const render = () => {
+    axios
+      .get(`https://kenziehub.herokuapp.com/users/${id}`)
+      .then((Response) => setAtt(Response.data.techs));
+  };
+  const [att, setAtt] = useState(false);
   const handleClose = (e) => {
-    axios.post(
-      "https://kenziehub.herokuapp.com/users/techs",
-      { title: e.title, status: e.status },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    if (e) {
+      axios.post(
+        "https://kenziehub.herokuapp.com/users/techs",
+        { title: e.title, status: e.status },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    }
 
     setOpen(false);
   };
+
+  useEffect(() => {
+    render();
+  }, [att]);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -113,7 +125,6 @@ function Tech() {
 
   const classe = useStyles();
 
-  console.log(tech);
   return (
     <>
       <div className={classe.root}>
@@ -129,8 +140,8 @@ function Tech() {
           </Button>
         </div>
         <div className={classe.card}>
-          {tech.techs
-            ? tech.techs.map((element, index) => (
+          {att
+            ? att.map((element, index) => (
                 <div key={index}>
                   <Card
                     title={element.title}

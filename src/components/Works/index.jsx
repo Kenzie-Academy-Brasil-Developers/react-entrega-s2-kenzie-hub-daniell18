@@ -4,7 +4,7 @@ import axios from "axios";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiCommentAdd } from "react-icons/bi";
 import Card from "../Card";
 
@@ -27,7 +27,16 @@ function Works() {
   const [token] = useState(
     JSON.parse(localStorage.getItem("@Kenziehub:token")) || ""
   );
-
+  const [id] = useState(tech.id);
+  const [att, setAtt] = useState(false);
+  const render = () => {
+    axios
+      .get(`https://kenziehub.herokuapp.com/users/${id}`)
+      .then((Response) => setAtt(Response.data.works));
+  };
+  useEffect(() => {
+    render();
+  }, [render()]);
   const [open, setOpen] = useState(false);
   const handleClose = (e) => {
     axios.post(
@@ -115,7 +124,7 @@ function Works() {
     },
   }));
   const classe = useStyles();
-  console.log(tech);
+
   return (
     <>
       <div className={classe.root}>
@@ -131,8 +140,8 @@ function Works() {
           </Button>
         </div>
         <div className={classe.card}>
-          {tech.works
-            ? tech.works.map((element, index) => (
+          {att
+            ? att.map((element, index) => (
                 <div key={index}>
                   <Card
                     title={element.title}
@@ -142,7 +151,7 @@ function Works() {
                   />
                 </div>
               ))
-            : "nao tem"}
+            : ""}
         </div>
 
         <Modal className={classe.modal} open={open} onClose={handleClose}>
