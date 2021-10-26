@@ -5,7 +5,7 @@ import { AiOutlineLink, AiFillDelete } from "react-icons/ai";
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
-function Card({ title, status, deploy_url, techid, workid }) {
+function Card({ title, status, deploy_url, techid, workid,att,setAtt }) {
   const [token] = useState(
     JSON.parse(localStorage.getItem("@Kenziehub:token")) || ""
   );
@@ -49,8 +49,11 @@ function Card({ title, status, deploy_url, techid, workid }) {
           },
         })
         .then(
-          (_) => toast.success("Tecnologia removida"),
-          toast.success("Relogue para visualisar")
+          (_) => {toast.success("Tecnologia removida")
+          
+          let aux=att.filter((item)=>item.id!==techid)
+          setAtt(aux)
+        }
         );
     } else {
       axios
@@ -60,8 +63,10 @@ function Card({ title, status, deploy_url, techid, workid }) {
           },
         })
         .then(
-          (_) => toast.success("Trabalho removido"),
-          toast.success("Relogue para visualisar")
+          (_) =>{ toast.success("Trabalho removido")
+         
+          let aux=att.filter((item)=>item.id!==workid)
+          setAtt(aux)}
         );
     }
   };

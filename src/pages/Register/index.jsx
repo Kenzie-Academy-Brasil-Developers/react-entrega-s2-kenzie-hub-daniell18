@@ -8,8 +8,10 @@ import axios from "axios";
 import bg from "../../assets/image/bglarge.png";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 function Register({ authorized }) {
+  const [valueOption,setValueOption]=useState("Status")
   const useStyles = makeStyles((theme) => ({
     root: {
       backgroundImage: `url(${bg})`,
@@ -47,10 +49,10 @@ function Register({ authorized }) {
     input: {
       backgroundColor: "white",
       borderRadius: "10px",
-
+width:"180px",
       marginTop: "2px",
     },
-
+  
     paragrafo: {
       margin: "0",
       fontSize: "12px",
@@ -86,9 +88,10 @@ function Register({ authorized }) {
       .post("https://kenziehub.herokuapp.com/users", user)
       .then((_) => {
         toast.success("Conta criada com sucesso");
+        history.push("/");
       })
       .catch((_) => toast.error("Erro ao crair conta tente novamente"));
-    history.push("/");
+    
   };
   const schema = yup.object().shape({
     email: yup.string().required("Campo Obrigatorio").email("Email invalido"),
@@ -228,10 +231,19 @@ function Register({ authorized }) {
                   <TextField
                     className={classe.input}
                     variant="outlined"
+                    defaultValue={valueOption}
                     label="Modulo autal"
                     placeholde="Modulo atual"
+                    onChange={(e)=>setValueOption(e.target.value)}
                     {...register("course_module")}
-                  />
+                    select
+                  
+                  >
+                <option  value="Primeiro módulo (Introdução ao Frontend)">Primeiro Modulo</option>
+               <option  value="Segundo módulo (Frontend Avançado)">Segundo Modulo</option>
+               <option  value="Terceiro módulo (Introdução ao Backend)">Terceiro Modulo</option>
+               <option  value="Quarto módulo (Backend Avançado)">Quarto Modulo</option>
+                  </TextField>
                 </Grid>
 
                 <Grid item>

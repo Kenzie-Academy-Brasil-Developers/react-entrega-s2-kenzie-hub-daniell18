@@ -33,8 +33,10 @@ function Header({ setAuthorized }) {
 
   const classe = useStyles();
   const handclick = () => {
-    <Redirect to="/" />;
+    localStorage.removeItem("@Kenziehub:authorized")
     setAuthorized(false);
+    return <Redirect to="/" />;
+    
   };
   return (
     <>

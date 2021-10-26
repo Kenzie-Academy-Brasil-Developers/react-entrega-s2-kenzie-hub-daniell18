@@ -20,39 +20,36 @@ function Tech() {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const [tech] = useState(
-    JSON.parse(localStorage.getItem("@Kenziehub:user")) || ""
-  );
+
   const [token] = useState(
     JSON.parse(localStorage.getItem("@Kenziehub:token")) || ""
   );
-  const [id] = useState(tech.id);
+ 
   const [open, setOpen] = useState(false);
-  const render = () => {
-    axios
-      .get(`https://kenziehub.herokuapp.com/users/${id}`)
-      .then((Response) => setAtt(Response.data.techs));
-  };
-  const [att, setAtt] = useState(false);
+  const [att, setAtt] = useState(JSON.parse(localStorage.getItem("@Kenziehub:techs")));
+
+  
+     
+
   const handleClose = (e) => {
-    if (e) {
-      axios.post(
-        "https://kenziehub.herokuapp.com/users/techs",
-        { title: e.title, status: e.status },
-        {
+ 
+     if (e.title) {
+     
+       axios.post(
+         "https://kenziehub.herokuapp.com/users/techs",
+         { title: e.title, status: e.status },
+         {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+          Authorization: `Bearer ${token}`,
+         },
+         }
+       ).then((response)=>setAtt([...att,response.data]))
     }
-
-    setOpen(false);
+    
+     setOpen(false);
   };
+useEffect(()=>{console.log(att)},[att])
 
-  useEffect(() => {
-    render();
-  }, [att]);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -121,7 +118,12 @@ function Tech() {
       marginTop: "15px",
       justifyContent: "space-between",
     },
+    input:{
+      width:"180px"
+    }
   }));
+  
+ const [valueOption,setValueOption]=useState("Status")
 
   const classe = useStyles();
 
@@ -144,6 +146,8 @@ function Tech() {
             ? att.map((element, index) => (
                 <div key={index}>
                   <Card
+                  att={att}
+                  setAtt={setAtt}
                     title={element.title}
                     status={element.status}
                     techid={element.id}
@@ -163,7 +167,12 @@ function Tech() {
             <p className={classe.paragrafo}>{errors.title?.message}</p>
             <TextField label="Tecnologia" {...register("title")} />
             <p className={classe.paragrafo}>{errors.status?.message}</p>
-            <TextField label="Status" {...register("status")} />
+            <TextField className={classe.input} name={valueOption} defaultValue={valueOption} onChange={(e)=>setValueOption(e.target.value)}  label="Status" select  {...register("status")} >
+         
+               <option  value="Iniciante">Iniciante</option>
+               <option  value="Intermediario">Intermediario</option>
+               <option  value="Avançado">Avançado</option>
+            </TextField>
             <Button className={classe.button} variant="contained" type="submit">
               Adicionar
             </Button>

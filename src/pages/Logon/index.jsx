@@ -7,8 +7,13 @@ import { Redirect } from "react-router";
 import Works from "../../components/Works";
 import { motion } from "framer-motion";
 function Logon({ authorized, setAuthorized }) {
+  
+  console.log(authorized)
   if (!authorized) {
+    setAuthorized(JSON.parse(localStorage.getItem("@Kenziehub:authorized")))
+    if(!authorized){
     return <Redirect to="/" />;
+    }
   }
   return (
     <motion.div

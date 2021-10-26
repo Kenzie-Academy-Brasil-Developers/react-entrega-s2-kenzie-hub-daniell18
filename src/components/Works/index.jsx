@@ -4,7 +4,7 @@ import axios from "axios";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BiCommentAdd } from "react-icons/bi";
 import Card from "../Card";
 
@@ -21,24 +21,15 @@ function Works() {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const [tech] = useState(
-    JSON.parse(localStorage.getItem("@Kenziehub:user")) || ""
-  );
+
   const [token] = useState(
     JSON.parse(localStorage.getItem("@Kenziehub:token")) || ""
   );
-  const [id] = useState(tech.id);
-  const [att, setAtt] = useState(false);
-  const render = () => {
-    axios
-      .get(`https://kenziehub.herokuapp.com/users/${id}`)
-      .then((Response) => setAtt(Response.data.works));
-  };
-  useEffect(() => {
-    render();
-  }, [render()]);
+ 
+  const [att, setAtt] = useState(JSON.parse(localStorage.getItem("@Kenziehub:works")));
   const [open, setOpen] = useState(false);
   const handleClose = (e) => {
+    if(e.title){
     axios.post(
       "https://kenziehub.herokuapp.com/users/works",
       {
@@ -51,8 +42,8 @@ function Works() {
           Authorization: `Bearer ${token}`,
         },
       }
-    );
-
+    ).then((response)=>setAtt([...att,response.data]))
+    }
     setOpen(false);
   };
   const handleOpen = () => {
@@ -122,6 +113,9 @@ function Works() {
       marginTop: "15px",
       justifyContent: "space-between",
     },
+    input:{
+      width:"180px"
+    }
   }));
   const classe = useStyles();
 
@@ -144,6 +138,8 @@ function Works() {
             ? att.map((element, index) => (
                 <div key={index}>
                   <Card
+                  att={att}
+                  setAtt={setAtt}
                     title={element.title}
                     status={element.description}
                     workid={element.id}
@@ -163,7 +159,7 @@ function Works() {
             <h2 className={classe.titleModal}>Adicione uma Tecnologia</h2>
             <TextField label="Titulo" {...register("title")} />
             <p className={classe.paragrafo}>{errors.title?.message}</p>
-            <TextField label="description" {...register("description")} />
+            <TextField className={classe.input} label="description"  {...register("description")} />
             <p className={classe.paragrafo}>{errors.description?.message}</p>
             <TextField label="Url" {...register("deploy_url")} />
             <p className={classe.paragrafo}>{errors.deploy_url?.message}</p>

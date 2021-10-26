@@ -84,19 +84,24 @@ function Login({ authorized, setAuthorized }) {
     history.push("/register");
   };
   const onhandleSubmit = (e) => {
+   
     axios
       .post("https://kenziehub.herokuapp.com/sessions", e)
-      .then((Response) => {
-        const { token, user } = Response.data;
+      .then((response) => {
+        const { token, user } = response.data;
         localStorage.setItem("@Kenziehub:token", JSON.stringify(token));
         localStorage.setItem("@Kenziehub:user", JSON.stringify(user));
+        localStorage.setItem("@Kenziehub:authorized",JSON.stringify(true))
+        localStorage.setItem("@Kenziehub:techs",JSON.stringify( response.data.user.techs))
+        localStorage.setItem("@Kenziehub:works",JSON.stringify( response.data.user.works))
         toast.success("Login realizado com sucesso");
         setAuthorized(true);
-        return history.push("/logon");
+        
       })
       .catch((_) => {
         toast.error("Erro ao ralizar login");
-      });
+      })
+    
   };
 
   if (authorized) {
